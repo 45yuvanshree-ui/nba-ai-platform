@@ -1,3 +1,4 @@
+from app.services.nba_service import get_recent_games
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -35,4 +36,9 @@ def live_games():
                 "status": "UPCOMING"
             }
         ]
+    }
+@app.get("/nba/recent-games")
+def recent_games():
+    return {
+        "games": get_recent_games()
     }
