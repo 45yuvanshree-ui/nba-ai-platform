@@ -1,115 +1,130 @@
-import DashboardLayout from "../layouts/DashboardLayout"
-import StatCard from "../components/StatCard"
+import { useEffect, useState } from "react";
+import DashboardLayout from "../layouts/DashboardLayout";
+import { fetchRecentGames } from "../services/api";
 
-function NBA() {
-  return (
-    <DashboardLayout title="NBA Dashboard">
+export default function NBA() {
 
-      {/* Top Analytics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    const [games, setGames] = useState([]);
 
-        <StatCard title="Live Games" value="8" />
+    useEffect(() => {
 
-        <StatCard title="Predictions Today" value="24" />
+        const loadGames = async () => {
 
-        <StatCard title="Top Players" value="120" />
+            const data = await fetchRecentGames();
 
-        <StatCard title="Teams Tracked" value="30" />
+            setGames(data);
+        };
 
-      </div>
+        loadGames();
 
-      {/* Section Title */}
-      <div className="mt-12 mb-6">
-        <h2 className="text-3xl font-bold">
-          Today's Featured Games
-        </h2>
-      </div>
+    }, []);
 
-      {/* Live Game Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    return (
+        <DashboardLayout>
 
-        {/* Game Card 1 */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 hover:border-green-400 transition">
+            <div className="p-8 bg-black min-h-screen text-white">
 
-          <div className="flex items-center justify-between mb-6">
-            <span className="text-red-400 font-bold">
-              LIVE
-            </span>
+                <h1 className="text-5xl font-bold mb-10">
+                    NBA Dashboard
+                </h1>
 
-            <span className="text-zinc-400">
-              Q3 • 08:21
-            </span>
-          </div>
+                {/* Stats Row */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
 
-          <div className="space-y-4">
+                    <div className="bg-zinc-900 p-6 rounded-3xl border border-zinc-800">
+                        <p className="text-zinc-400 mb-2">Recent Games</p>
+                        <h2 className="text-5xl font-bold text-green-400">
+                            {games.length}
+                        </h2>
+                    </div>
 
-            <div className="flex items-center justify-between">
-              <h3 className="text-2xl font-bold">
-                Lakers
-              </h3>
+                    <div className="bg-zinc-900 p-6 rounded-3xl border border-zinc-800">
+                        <p className="text-zinc-400 mb-2">Tracked Team</p>
+                        <h2 className="text-4xl font-bold text-green-400">
+                            Lakers
+                        </h2>
+                    </div>
 
-              <p className="text-3xl font-bold text-green-400">
-                88
-              </p>
+                    <div className="bg-zinc-900 p-6 rounded-3xl border border-zinc-800">
+                        <p className="text-zinc-400 mb-2">AI Status</p>
+                        <h2 className="text-3xl font-bold text-green-400">
+                            Active
+                        </h2>
+                    </div>
+
+                    <div className="bg-zinc-900 p-6 rounded-3xl border border-zinc-800">
+                        <p className="text-zinc-400 mb-2">Prediction Engine</p>
+                        <h2 className="text-3xl font-bold text-green-400">
+                            Online
+                        </h2>
+                    </div>
+
+                </div>
+
+                {/* Real NBA Games */}
+                <div>
+
+                    <h2 className="text-4xl font-bold mb-8">
+                        Real Lakers Recent Games
+                    </h2>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        {games.map((game, index) => (
+
+                            <div
+                                key={index}
+                                className="bg-zinc-900 p-6 rounded-3xl border border-zinc-800"
+                            >
+
+                                <div className="flex justify-between items-center mb-6">
+
+                                    <span className="
+                                        bg-green-500/20
+                                        text-green-400
+                                        px-4
+                                        py-2
+                                        rounded-full
+                                        text-sm
+                                        font-bold
+                                    ">
+                                        {game.result === "W"
+                                            ? "WIN"
+                                            : "LOSS"}
+                                    </span>
+
+                                    <span className="text-zinc-400">
+                                        {game.date}
+                                    </span>
+
+                                </div>
+
+                                <h3 className="text-3xl font-bold mb-4">
+                                    {game.matchup}
+                                </h3>
+
+                                <div className="flex justify-between items-center">
+
+                                    <p className="text-zinc-400">
+                                        Lakers Points
+                                    </p>
+
+                                    <h2 className="text-5xl font-bold text-green-400">
+                                        {game.points}
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+                        ))}
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <div className="flex items-center justify-between">
-              <h3 className="text-2xl font-bold">
-                Warriors
-              </h3>
-
-              <p className="text-3xl font-bold text-green-400">
-                91
-              </p>
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* Game Card 2 */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 hover:border-green-400 transition">
-
-          <div className="flex items-center justify-between mb-6">
-            <span className="text-yellow-400 font-bold">
-              UPCOMING
-            </span>
-
-            <span className="text-zinc-400">
-              8:30 PM
-            </span>
-          </div>
-
-          <div className="space-y-4">
-
-            <div className="flex items-center justify-between">
-              <h3 className="text-2xl font-bold">
-                Celtics
-              </h3>
-
-              <p className="text-xl text-zinc-400">
-                vs
-              </p>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <h3 className="text-2xl font-bold">
-                Bucks
-              </h3>
-
-              <p className="text-xl text-zinc-400">
-                Tonight
-              </p>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </DashboardLayout>
-  )
+        </DashboardLayout>
+    );
 }
-
-export default NBA
